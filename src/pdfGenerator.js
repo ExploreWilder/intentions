@@ -21,10 +21,13 @@ import { createIntl, createIntlCache } from "react-intl";
 
 function arrayBufferToString(buffer) {
     return binaryToString(
-        String.fromCharCode.apply(
-            null,
-            Array.prototype.slice.apply(new Uint8Array(buffer))
-        )
+        // use the reduce method to convert the buffer in small chunks
+        // that is to avoid an "out of range" error on Chrome-based browser
+        Array.prototype.slice
+            .apply(new Uint8Array(buffer))
+            .reduce((data, byte) => {
+                return data + String.fromCharCode(byte);
+            }, "")
     );
 }
 
@@ -139,6 +142,7 @@ class pdfGenerator extends jsPDF {
         const footerHeight = 2 * oneLineHeight;
         this.currY += totalLines * oneLineHeight;
         if (this.currY > this.pageHeight - this.margin - footerHeight) {
+            this.currY += oneLineHeight;
             const prevFont = this.getFont();
             const prevSize = this.getFontSize();
             this.setFont("myText", "normal").setFontSize(10);

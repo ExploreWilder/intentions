@@ -145,19 +145,21 @@ const TimeRange = () => {
  * @constructor
  */
 const Activity = () => {
+    const { formatMessage } = useIntl();
+
     return (
         <Form.Item
             label={<FormattedMessage id="activityLabel" />}
             name="activity"
         >
             <Select style={{ width: 120 }}>
-                <Option value={<FormattedMessage id="hiking" />}>
+                <Option value={formatMessage({ id: "hiking" })}>
                     <FormattedMessage id="hiking" />
                 </Option>
-                <Option value={<FormattedMessage id="skiing" />}>
+                <Option value={formatMessage({ id: "skiing" })}>
                     <FormattedMessage id="skiing" />
                 </Option>
-                <Option value={<FormattedMessage id="climbing" />}>
+                <Option value={formatMessage({ id: "climbing" })}>
                     <FormattedMessage id="climbing" />
                 </Option>
             </Select>
@@ -304,6 +306,7 @@ class IntentionsForm extends Component {
      * @param data Members data and trip details.
      */
     newDoc = (data) => {
+        // font styles are: normal, bold, italic, bolditalic
         this.doc = new pdfGenerator(
             [
                 {

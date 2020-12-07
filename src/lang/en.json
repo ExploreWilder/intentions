@@ -83,7 +83,7 @@
     "aboutSecurityTitle": "What About Security?",
     "aboutSecurityDesc": "Even if your personal data are not sent anywhere, how to ensure a safe transit of the application to your browser? This web page has been encrypted before being transmitted to your computer with the TLS protocol (<a href='https://www.ssllabs.com/ssltest/analyze.html?d=intentions.explorewilder.com'>rated A+</a> by the Qualys' SSL Labs, with HSTS and PFS among other security features.) Also, a strict Content Security Policy is enforced. Last but not least, I don't mind if you don't use this application, what really matters is to tell someone your intentions!",
     "aboutMeTitle": "About Me",
-    "aboutMeDesc": "My name is Clement and I feel like an adventurer, nature lover, and engineer. I like travelling and meeting people, exploring real wilderness, and building and sharing things like this application and <a href='https://explorewilder.com/'>my personnal website</a>.",
+    "aboutMeDesc": "My name is Clement and I feel like an adventurer, nature lover, and engineer. I like travelling and meeting people, exploring real wilderness, and building and sharing things like this application and <a href='https://explorewilder.com/'>my personal website</a>.",
     "close": "Close",
     "buyMeACoffee": "Buy me a coffee!",
     "aboutSupportTitle": "Support Me",
