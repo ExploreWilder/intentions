@@ -82,8 +82,8 @@ const AllCharacterDetails = (props) => {
             <>
                 <Divider>
                     <Title level={4}>
-                        <FormattedMessage id="aboutYou" />
-                        (<FormattedMessage id="teamLeader" />)
+                        <FormattedMessage id="aboutYou" /> (
+                        <FormattedMessage id="teamLeader" />)
                     </Title>
                 </Divider>
                 <CharacterDetails
@@ -133,7 +133,10 @@ const TimeRange = () => {
             label={<FormattedMessage id="timeRangePickerLabel" />}
             name="timeRange"
         >
-            <RangePicker showTime />
+            <RangePicker
+                showTime={{ format: "HH:mm" }}
+                format="YYYY-MM-DD HH:mm"
+            />
         </Form.Item>
     );
 };
