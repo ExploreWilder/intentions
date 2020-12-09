@@ -295,10 +295,16 @@ class pdfGenerator extends jsPDF {
 
         // logistics:
         if (this.formData.prePostTripIntentions) {
-            this.addPrePostTripIntentions();
+            this.addTextareaInput(
+                this.locale.prePostTripIntentionsLabel,
+                this.formData.prePostTripIntentions
+            );
         }
         if (this.formData.postTripIntentionsDetails) {
-            this.addPostTripIntentionsDetails();
+            this.addTextareaInput(
+                this.locale.postTripIntentionsDetailsLabel,
+                this.formData.postTripIntentionsDetails
+            );
         }
 
         // important notice:
@@ -391,30 +397,47 @@ class pdfGenerator extends jsPDF {
             );
         }
         if (member.identity) {
-            this.moveCursorDown();
-            this.text(this.locale.identityPdfLabel, this.margin, this.currY);
-            const textLines = this.splitTextToSize(
-                member.identity,
-                this.maxLineWidth
-            );
-            textLines.forEach((textLine) => {
-                this.moveCursorDown();
-                this.text(textLine, this.margin, this.currY);
-            });
+            this.addMemberInput(this.locale.identityPdfLabel, member.identity);
         }
         if (member.description) {
-            this.moveCursorDown();
-            this.text(this.locale.descriptionLabel, this.margin, this.currY);
-            const textLines = this.splitTextToSize(
-                member.description,
-                this.maxLineWidth
+            this.addMemberInput(
+                this.locale.descriptionLabel,
+                member.description
             );
-            textLines.forEach((textLine) => {
-                this.moveCursorDown();
-                this.text(textLine, this.margin, this.currY);
-            });
         }
         this.moveCursorDown();
+    };
+
+    /**
+     * Add a one-line description and a multi-line text, without new line.
+     * @param label One-line text.
+     * @param text Multi-line text.
+     */
+    addMemberInput = (label, text) => {
+        this.moveCursorDown();
+        this.text(label, this.margin, this.currY);
+        const textLines = this.splitTextToSize(text, this.maxLineWidth);
+        textLines.forEach((textLine) => {
+            this.moveCursorDown();
+            this.text(textLine, this.margin, this.currY);
+        });
+    };
+
+    /**
+     * Add a one-line description in bold, a multi-line text, and a blank line.
+     * @param label One-line text.
+     * @param text Multi-line text.
+     */
+    addTextareaInput = (label, text) => {
+        this.setFont("myText", "bold").setFontSize(12);
+        this.text(label, this.margin, this.currY);
+        this.setFont("myText", "normal").setFontSize(12);
+        const textLines = this.splitTextToSize(text, this.maxLineWidth);
+        textLines.forEach((textLine) => {
+            this.moveCursorDown();
+            this.text(textLine, this.margin, this.currY);
+        });
+        this.moveCursorDown(2);
     };
 
     /**
@@ -432,7 +455,7 @@ class pdfGenerator extends jsPDF {
             this.margin + offsetLeft + 2 * circleRadius + gapAfterCircle;
         this.formData.essentialGear.forEach((gearItem) => {
             this.moveCursorDown();
-            this.setFillColor(0);
+            this.setFillColor(0); // black
             this.circle(
                 this.margin + offsetLeft - circleRadius,
                 this.currY - 1.5 * circleRadius,
@@ -440,50 +463,6 @@ class pdfGenerator extends jsPDF {
                 "F"
             );
             this.text(gearItem, posLeft, this.currY);
-        });
-        this.moveCursorDown(2);
-    };
-
-    /**
-     * Add information based on a textarea label and content.
-     */
-    addPrePostTripIntentions = () => {
-        this.setFont("myText", "bold").setFontSize(12);
-        this.text(
-            this.locale.prePostTripIntentionsLabel,
-            this.margin,
-            this.currY
-        );
-        this.setFont("myText", "normal").setFontSize(12);
-        const textLines = this.splitTextToSize(
-            this.formData.prePostTripIntentions,
-            this.maxLineWidth
-        );
-        textLines.forEach((textLine) => {
-            this.moveCursorDown();
-            this.text(textLine, this.margin, this.currY);
-        });
-        this.moveCursorDown(2);
-    };
-
-    /**
-     * Add information based on a textarea label and content.
-     */
-    addPostTripIntentionsDetails = () => {
-        this.setFont("myText", "bold").setFontSize(12);
-        this.text(
-            this.locale.postTripIntentionsDetailsLabel,
-            this.margin,
-            this.currY
-        );
-        this.setFont("myText", "normal").setFontSize(12);
-        const textLines = this.splitTextToSize(
-            this.formData.postTripIntentionsDetails,
-            this.maxLineWidth
-        );
-        textLines.forEach((textLine) => {
-            this.moveCursorDown();
-            this.text(textLine, this.margin, this.currY);
         });
         this.moveCursorDown(2);
     };
