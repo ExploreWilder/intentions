@@ -212,7 +212,7 @@ const GearList = () => {
     const { formatMessage } = useIntl();
     const optionsGear = [];
 
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 14; i++) {
         const itemId = `gear${i}`;
         optionsGear.push(
             <Option key={formatMessage({ id: itemId })}>

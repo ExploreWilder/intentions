@@ -74,6 +74,8 @@
     "gear10": "Radio de montagne",
     "gear11": "ARVA + pelle + sonde",
     "gear12": "Airbag",
+    "gear13": "Feu de Bengale",
+    "gear14": "Lampe de secours et batteries en rab",
     "aboutWhatTitle": "Késako ?",
     "aboutWhatDesc": "Être préparé aux imprévus est important pour une aventure réussie. Quand vous vous engagez en pleine nature, emporter le bon matériel n'est pas suffisant, avoir l'expérience du terrain est important, et dire à quelqu'un vos intentions peut sauver votre vie. Cette application web a pour but de vous aider à partager les bonnes informations pour une recherche rapide et un sauvetage efficace.",
     "aboutHowTitle": "Comment ça marche ?",
@@ -111,5 +113,7 @@
     "dateTimeGap": "à",
     "dateTimeBefore": "le",
     "page": "Page",
-    "pto": "tournez la page"
+    "pto": "tournez la page",
+    "source": "Source",
+    "status": "Statut"
 }

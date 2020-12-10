@@ -25,22 +25,24 @@ import { FormattedMessage } from "react-intl";
  * @constructor
  */
 const CopyrightNotice = () => {
-    const year = new Date().getFullYear().toString().slice(2);
-    const firstYear = "20";
-    const period =
-        year === firstYear ? "20" + firstYear : `20${firstYear}-${year}`;
-
     return (
         <>
             <em>
                 <FormattedMessage id="pageHeaderTitle" />
             </em>{" "}
-            · Copyright © {period} (
+            · <FormattedMessage id="createdBy" />{" "}
+            <a href="https://explorewilder.com/about">Clement</a> ·{" "}
             <a href="https://github.com/ExploreWilder/intentions/blob/main/LICENSE">
-                GPLv3
+                Copyright
+            </a>{" "}
+            ·{" "}
+            <a href="https://github.com/ExploreWilder/intentions/">
+                <FormattedMessage id="source" />
+            </a>{" "}
+            ·{" "}
+            <a href="https://explorewilder.statuspage.io/">
+                <FormattedMessage id="status" />
             </a>
-            ) · <FormattedMessage id="createdBy" />{" "}
-            <a href="https://explorewilder.com/about">Clement</a>
         </>
     );
 };
