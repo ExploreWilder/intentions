@@ -24,7 +24,9 @@ import {
     DatePicker,
     Select,
     Input,
+    List,
     Button,
+    Modal,
     Typography,
     Popconfirm,
 } from "antd";
@@ -205,21 +207,76 @@ const TripDetails = () => {
 
 /**
  * Essential gear list with the possibility of adding custom gear not in the dropdown list.
+ * A State Hook is used to use useIntl() and handle changes inside the component.
  * @returns {JSX.Element}
  * @constructor
  */
 const GearList = () => {
+    const [selectedItems, setSelectedItems] = React.useState(false);
     const { formatMessage } = useIntl();
     const optionsGear = [];
 
     for (let i = 1; i <= 14; i++) {
         const itemId = `gear${i}`;
         optionsGear.push(
-            <Option key={formatMessage({ id: itemId })}>
+            <Option key={formatMessage({ id: itemId })} value={itemId}>
                 <FormattedMessage id={itemId} />
             </Option>
         );
     }
+
+    /**
+     * Keep track of the selected items.
+     * @param newSelectedItems List of selected items.
+     */
+    const handleChange = (newSelectedItems) => {
+        setSelectedItems(newSelectedItems);
+    };
+
+    /**
+     * When the user leaves the dropdown menu. The blur event does not have the
+     * list of selected items, that is why the onChange event is used.
+     */
+    const handleBlur = () => {
+        let warnings = [];
+        selectedItems.forEach((item) => {
+            switch (item) {
+                case "gear1": // hat
+                case "gear7": // PLB
+                case "gear13": // flare
+                    warnings.push({
+                        title: formatMessage({ id: item }),
+                        description: formatMessage({ id: item + "warning" }),
+                    });
+                    break;
+
+                default:
+                    break;
+            }
+        });
+        if (warnings.length) {
+            // specific information displayed in a modal
+            Modal.info({
+                title: formatMessage({ id: "gearWarning" }),
+                width: 800,
+                content: (
+                    <List
+                        itemLayout="horizontal"
+                        bordered={true}
+                        dataSource={warnings}
+                        renderItem={(item) => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    title={item.title}
+                                    description={item.description}
+                                />
+                            </List.Item>
+                        )}
+                    ></List>
+                ),
+            });
+        }
+    };
 
     return (
         <Form.Item
@@ -230,6 +287,8 @@ const GearList = () => {
             <Select
                 mode="tags"
                 placeholder={<FormattedMessage id="goingNude" />}
+                onChange={handleChange}
+                onBlur={handleBlur}
             >
                 {optionsGear}
             </Select>

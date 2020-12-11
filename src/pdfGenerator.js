@@ -462,7 +462,7 @@ class pdfGenerator extends jsPDF {
                 circleRadius,
                 "F"
             );
-            this.text(gearItem, posLeft, this.currY);
+            this.text(this.locale[gearItem], posLeft, this.currY);
         });
         this.moveCursorDown(2);
     };
