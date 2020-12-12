@@ -1,6 +1,6 @@
 {
     "pageHeaderTitle": "Projet d'aventure",
-    "pageHeaderSubTitle": "Planifiez votre aventure et prévenez quelqu'un, ça pourrait sauvez votre vie",
+    "pageHeaderSubTitle": "Planifiez votre aventure et prévenez quelqu'un, ça pourrait sauvez votre vie !",
     "language": "Langue",
     "about": "À propos",
     "support": "M'encourager",
@@ -55,6 +55,8 @@
     "medicalConditionsLabel": "État de santé :",
     "medicalConditionsExtra": "Décrivez votre santé et/ou prescriptions",
     "medicalConditionsNotice": "C'est important !",
+    "satPhoneNumberNotice": "C'est important !",
+    "satPhoneNumberLabel": "Numéro de téléphone satellite :",
     "level1": "Première fois",
     "level2": "Débutant",
     "level3": "Bon",

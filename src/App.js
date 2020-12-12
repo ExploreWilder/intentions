@@ -18,13 +18,13 @@
 
 import React, { Component } from "react";
 import {
-    PageHeader,
     Layout,
     Menu,
     BackTop,
     ConfigProvider,
     Drawer,
     Modal,
+    Typography,
 } from "antd";
 import {
     TranslationOutlined,
@@ -41,8 +41,9 @@ import frFR from "antd/lib/locale/fr_FR";
 import "moment/locale/fr";
 import moment from "moment";
 import "antd/dist/antd.css";
-const { Footer, Sider, Content } = Layout;
+const { Footer, Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
+const { Title } = Typography;
 
 // moment is required for full translations in antd components
 moment.locale("en-gb");
@@ -67,6 +68,7 @@ class App extends Component {
         currentAntLocale: enGB,
         visibleAbout: false,
         visibleSupport: false,
+        collapsedSider: false,
     };
 
     /**
@@ -145,12 +147,24 @@ class App extends Component {
         });
     };
 
+    /**
+     * When the sider is (un)collapsed.
+     * @param collapsed
+     */
+    onCollapse = (collapsed) => {
+        this.setState({
+            ...this.state,
+            collapsedSider: collapsed,
+        });
+    };
+
     render() {
         const {
             currentLocale,
             currentAntLocale,
             visibleAbout,
             visibleSupport,
+            collapsedSider,
         } = this.state;
 
         return (
@@ -191,55 +205,84 @@ class App extends Component {
                         ></p>
                     </Modal>
                     <BackTop />
-                    <PageHeader
-                        title={<FormattedMessage id="pageHeaderTitle" />}
-                        subTitle={<FormattedMessage id="pageHeaderSubTitle" />}
-                    />
                     <Layout>
-                        <Layout>
-                            <Sider>
-                                <Menu
-                                    mode="inline"
-                                    theme="dark"
-                                    selectedKeys={[currentLocale]}
+                        <Sider
+                            collapsible
+                            collapsed={collapsedSider}
+                            onCollapse={this.onCollapse}
+                            style={{
+                                overflow: "auto",
+                                height: "100vh",
+                                position: "fixed",
+                                left: 0,
+                            }}
+                        >
+                            <Menu
+                                mode="inline"
+                                theme="dark"
+                                selectedKeys={[currentLocale]}
+                            >
+                                <SubMenu
+                                    key="sub1"
+                                    icon={<TranslationOutlined />}
+                                    title={<FormattedMessage id="language" />}
+                                    onClick={this.handleLanguage}
                                 >
-                                    <SubMenu
-                                        key="sub1"
-                                        icon={<TranslationOutlined />}
-                                        title={
-                                            <FormattedMessage id="language" />
-                                        }
-                                        onClick={this.handleLanguage}
-                                    >
-                                        <Menu.Item key="en">English</Menu.Item>
-                                        <Menu.Item key="fr">Français</Menu.Item>
-                                    </SubMenu>
-                                    <Menu.Item
-                                        key="about"
-                                        icon={<QuestionOutlined />}
-                                        onClick={this.showAbout}
-                                    >
-                                        <FormattedMessage id="about" />
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        key="support"
-                                        icon={<HeartOutlined />}
-                                        onClick={this.showSupport}
-                                    >
-                                        <FormattedMessage id="support" />
-                                    </Menu.Item>
-                                </Menu>
-                            </Sider>
+                                    <Menu.Item key="en">English</Menu.Item>
+                                    <Menu.Item key="fr">Français</Menu.Item>
+                                </SubMenu>
+                                <Menu.Item
+                                    key="about"
+                                    icon={<QuestionOutlined />}
+                                    onClick={this.showAbout}
+                                >
+                                    <FormattedMessage id="about" />
+                                </Menu.Item>
+                                <Menu.Item
+                                    key="support"
+                                    icon={<HeartOutlined />}
+                                    onClick={this.showSupport}
+                                >
+                                    <FormattedMessage id="support" />
+                                </Menu.Item>
+                            </Menu>
+                        </Sider>
+                        <Layout
+                            style={{ marginLeft: collapsedSider ? 80 : 200 }}
+                        >
                             <Content className="intentionsContent">
+                                <Header
+                                    style={{
+                                        minHeight: 370,
+                                        padding: 0,
+                                        marginTop: 24,
+                                    }}
+                                >
+                                    <div className="imageTitle">
+                                        <img
+                                            width={900}
+                                            src="/images/header.jpg"
+                                            alt="Snow On The Ridge"
+                                        />
+                                        <div className="textAboveImage">
+                                            <Title>
+                                                <FormattedMessage id="pageHeaderTitle" />
+                                            </Title>
+                                            <Title level={3}>
+                                                <FormattedMessage id="pageHeaderSubTitle" />
+                                            </Title>
+                                        </div>
+                                    </div>
+                                </Header>
                                 <IntentionsForm
                                     locale={this.translations[currentLocale]}
                                     lang={currentLocale}
                                 />
                             </Content>
+                            <Footer className="intentionsFooter">
+                                <CopyrightNotice />
+                            </Footer>
                         </Layout>
-                        <Footer className="intentionsFooter">
-                            <CopyrightNotice />
-                        </Footer>
                     </Layout>
                 </ConfigProvider>
             </IntlProvider>

@@ -212,18 +212,38 @@ const TripDetails = () => {
  * @constructor
  */
 const GearList = () => {
-    const [selectedItems, setSelectedItems] = React.useState(false);
+    const [selectedItems, setSelectedItems] = React.useState([]); // nothing selected
+    const [hasSatPhone, setHasSatPhone] = React.useState(false); // no phone
     const { formatMessage } = useIntl();
     const optionsGear = [];
+    const satPhone = formatMessage({ id: "gear9" });
+    const totalItems = 14;
+    const availableWarnings = [1, 7, 13];
 
-    for (let i = 1; i <= 14; i++) {
+    React.useEffect(() => {
+        setHasSatPhone(selectedItems.indexOf(satPhone) !== -1);
+    }, [selectedItems, satPhone]); // re-run the effect only if updating the list
+
+    for (let i = 1; i <= totalItems; i++) {
         const itemId = `gear${i}`;
         optionsGear.push(
-            <Option key={formatMessage({ id: itemId })} value={itemId}>
+            <Option key={itemId} value={formatMessage({ id: itemId })}>
                 <FormattedMessage id={itemId} />
             </Option>
         );
     }
+
+    /**
+     * When the user remove an item without using the dropdown list, update the list.
+     * @param deselectedItem Just the deleted items.
+     */
+    const handleDeselect = (deselectedItem) => {
+        setSelectedItems(
+            selectedItems.filter((value) => {
+                return value !== deselectedItem;
+            })
+        );
+    };
 
     /**
      * Keep track of the selected items.
@@ -239,21 +259,25 @@ const GearList = () => {
      */
     const handleBlur = () => {
         let warnings = [];
-        selectedItems.forEach((item) => {
-            switch (item) {
-                case "gear1": // hat
-                case "gear7": // PLB
-                case "gear13": // flare
-                    warnings.push({
-                        title: formatMessage({ id: item }),
-                        description: formatMessage({ id: item + "warning" }),
-                    });
-                    break;
 
-                default:
-                    break;
-            }
+        selectedItems.forEach((item) => {
+            availableWarnings.some((idx) => {
+                // find key from value
+                const itemId = `gear${idx}`;
+                const title = formatMessage({ id: itemId });
+                const desc = formatMessage({ id: itemId + "warning" });
+
+                if (title === item) {
+                    warnings.push({
+                        title: title,
+                        description: desc,
+                    });
+                    return true; // stop looping over warnings
+                }
+                return false;
+            });
         });
+
         if (warnings.length) {
             // specific information displayed in a modal
             Modal.info({
@@ -279,20 +303,36 @@ const GearList = () => {
     };
 
     return (
-        <Form.Item
-            label={<FormattedMessage id="essentialGearLabel" />}
-            extra={<FormattedMessage id="essentialGearExtra" />}
-            name="essentialGear"
-        >
-            <Select
-                mode="tags"
-                placeholder={<FormattedMessage id="goingNude" />}
-                onChange={handleChange}
-                onBlur={handleBlur}
+        <>
+            <Form.Item
+                label={<FormattedMessage id="essentialGearLabel" />}
+                extra={<FormattedMessage id="essentialGearExtra" />}
+                name="essentialGear"
             >
-                {optionsGear}
-            </Select>
-        </Form.Item>
+                <Select
+                    mode="tags"
+                    placeholder={<FormattedMessage id="goingNude" />}
+                    onChange={handleChange}
+                    onDeselect={handleDeselect}
+                    onBlur={handleBlur}
+                >
+                    {optionsGear}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                label={<FormattedMessage id="satPhoneNumberLabel" />}
+                style={hasSatPhone ? {} : { display: "none" }}
+                name="satPhoneNumber"
+                rules={[
+                    {
+                        required: hasSatPhone,
+                        message: <FormattedMessage id="satPhoneNumberNotice" />,
+                    },
+                ]}
+            >
+                <Input />
+            </Form.Item>
+        </>
     );
 };
 

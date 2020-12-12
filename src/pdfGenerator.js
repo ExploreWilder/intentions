@@ -462,7 +462,22 @@ class pdfGenerator extends jsPDF {
                 circleRadius,
                 "F"
             );
-            this.text(this.locale[gearItem], posLeft, this.currY);
+            this.text(gearItem, posLeft, this.currY);
+
+            // add sat phone number:
+            if (gearItem === this.locale["gear9"]) {
+                const sep = " - ";
+                let extraOffsetLeft = posLeft + this.getTextWidth(gearItem);
+                this.text(sep, extraOffsetLeft, this.currY);
+                extraOffsetLeft += this.getTextWidth(sep);
+                this.setFont("myText", "bold").setFontSize(12);
+                this.text(
+                    this.formData.satPhoneNumber,
+                    extraOffsetLeft,
+                    this.currY
+                );
+                this.setFont("myText", "normal").setFontSize(12);
+            }
         });
         this.moveCursorDown(2);
     };

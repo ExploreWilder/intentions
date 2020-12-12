@@ -1,6 +1,6 @@
 {
     "pageHeaderTitle": "Trip Intentions",
-    "pageHeaderSubTitle": "Plan your trip & tell someone, it could save your life",
+    "pageHeaderSubTitle": "Plan your trip & tell someone, it could save your life!",
     "language": "Language",
     "about": "About",
     "support": "Support",
@@ -55,6 +55,8 @@
     "medicalConditionsLabel": "Medical Conditions:",
     "medicalConditionsExtra": "Describe your medical conditions and/or medication",
     "medicalConditionsNotice": "It's important!",
+    "satPhoneNumberNotice": "It's important!",
+    "satPhoneNumberLabel": "Satellite Phone Number:",
     "level1": "First time",
     "level2": "Beginner",
     "level3": "Good",

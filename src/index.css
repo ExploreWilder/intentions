@@ -16,6 +16,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+@font-face {
+    font-family: "myTitle";
+    src: local("myTitle"),
+        url(./fonts/life_savers/LifeSavers_Regular.ttf) format("truetype");
+}
+
 .intentionsContent {
     margin: auto;
     max-width: 900px;
@@ -27,14 +33,53 @@
     margin-top: 24px;
 }
 
-.aboutPanel .ant-collapse-header {
-    font-weight: bold;
-}
-
 .aboutPanel .ant-collapse-content-box p {
     text-align: justify;
 }
 
 .intentionsFooter {
     text-align: center;
+}
+
+.imageTitle {
+    position: relative;
+}
+
+.textAboveImage {
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 50px;
+    width: 100%;
+    text-shadow: 1px 1px 1px white;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: myTitle;
+    font-weight: 600;
+}
+
+.ant-drawer-title,
+.ant-modal-title,
+.ant-collapse-header,
+.ant-modal-confirm-title {
+    font-family: myTitle;
+    font-size: 21px !important;
+    font-weight: 600 !important;
+}
+
+.ant-modal-confirm-title {
+    line-height: 1.2 !important;
+}
+
+.ant-list-item-meta-title {
+    font-size: 17px;
+}
+
+.ant-back-top {
+    right: 24px !important;
+    bottom: 24px !important;
 }
