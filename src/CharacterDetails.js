@@ -289,10 +289,10 @@ const CharacterDetails = (props) => {
     return (
         <>
             <Row gutter={12}>
-                <Col span={6} push={18}>
+                <Col xs={{ span: 24 }} md={{ span: 6, push: 18 }}>
                     <Sex handleSex={handleSex} />
                 </Col>
-                <Col span={18} pull={6}>
+                <Col xs={{ span: 24 }} md={{ span: 18, pull: 6 }}>
                     <Name
                         handleFirstName={handleFirstName}
                         handleFamilyName={handleFamilyName}
@@ -300,10 +300,10 @@ const CharacterDetails = (props) => {
                 </Col>
             </Row>
             <Row gutter={12}>
-                <Col span={12}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
                     <PhoneNumber handlePhoneNumber={handlePhoneNumber} />
                 </Col>
-                <Col span={12}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
                     <Level handleLevel={handleLevel} level={level} />
                 </Col>
             </Row>

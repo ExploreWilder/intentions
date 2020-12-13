@@ -17,15 +17,7 @@
  */
 
 import React, { Component } from "react";
-import {
-    Layout,
-    Menu,
-    BackTop,
-    ConfigProvider,
-    Drawer,
-    Modal,
-    Typography,
-} from "antd";
+import { Layout, Menu, BackTop, ConfigProvider, Modal, Typography } from "antd";
 import {
     TranslationOutlined,
     QuestionOutlined,
@@ -68,7 +60,6 @@ class App extends Component {
         currentAntLocale: enGB,
         visibleAbout: false,
         visibleSupport: false,
-        collapsedSider: false,
     };
 
     /**
@@ -108,7 +99,7 @@ class App extends Component {
     };
 
     /**
-     * When the "About" drawer is closed.
+     * When the "About" modal is closed.
      */
     onCloseAbout = () => {
         this.setState({
@@ -118,7 +109,7 @@ class App extends Component {
     };
 
     /**
-     * Show the "About" drawer.
+     * Show the "About" modal.
      */
     showAbout = () => {
         this.setState({
@@ -128,7 +119,7 @@ class App extends Component {
     };
 
     /**
-     * When the "Support" modale is closed.
+     * When the "Support" modal is closed.
      */
     handleCancelSupport = () => {
         this.setState({
@@ -138,23 +129,12 @@ class App extends Component {
     };
 
     /**
-     * Show the "Support" modale.
+     * Show the "Support" modal.
      */
     showSupport = () => {
         this.setState({
             ...this.state,
             visibleSupport: true,
-        });
-    };
-
-    /**
-     * When the sider is (un)collapsed.
-     * @param collapsed
-     */
-    onCollapse = (collapsed) => {
-        this.setState({
-            ...this.state,
-            collapsedSider: collapsed,
         });
     };
 
@@ -164,7 +144,6 @@ class App extends Component {
             currentAntLocale,
             visibleAbout,
             visibleSupport,
-            collapsedSider,
         } = this.state;
 
         return (
@@ -174,17 +153,15 @@ class App extends Component {
                 defaultLocale="en"
             >
                 <ConfigProvider locale={currentAntLocale}>
-                    <Drawer
+                    <Modal
                         title={<FormattedMessage id="about" />}
-                        placement="right"
-                        closable={false}
                         visible={visibleAbout}
-                        onClose={this.onCloseAbout}
-                        width={768}
+                        className="modalAbout"
+                        onCancel={this.onCloseAbout}
                         footer={<CopyrightNotice />}
                     >
                         <About />
-                    </Drawer>
+                    </Modal>
                     <Modal
                         title={<FormattedMessage id="aboutSupportTitle" />}
                         visible={visibleSupport}
@@ -206,19 +183,42 @@ class App extends Component {
                     </Modal>
                     <BackTop />
                     <Layout>
-                        <Sider
-                            collapsible
-                            collapsed={collapsedSider}
-                            onCollapse={this.onCollapse}
-                            style={{
-                                overflow: "auto",
-                                height: "100vh",
-                                position: "fixed",
-                                left: 0,
-                            }}
-                        >
+                        <Sider className="largeScreenSizeMenu">
                             <Menu
                                 mode="inline"
+                                theme="dark"
+                                selectedKeys={[currentLocale]}
+                            >
+                                <SubMenu
+                                    key="sub1"
+                                    icon={<TranslationOutlined />}
+                                    title={<FormattedMessage id="language" />}
+                                    onClick={this.handleLanguage}
+                                    style={{ width: 200 }}
+                                >
+                                    <Menu.Item key="en">English</Menu.Item>
+                                    <Menu.Item key="fr">Français</Menu.Item>
+                                </SubMenu>
+                                <Menu.Item
+                                    key="about"
+                                    icon={<QuestionOutlined />}
+                                    onClick={this.showAbout}
+                                >
+                                    <FormattedMessage id="about" />
+                                </Menu.Item>
+                                <Menu.Item
+                                    key="support"
+                                    icon={<HeartOutlined />}
+                                    onClick={this.showSupport}
+                                >
+                                    <FormattedMessage id="support" />
+                                </Menu.Item>
+                            </Menu>
+                        </Sider>
+                        <Layout className="expandedSider">
+                            <Menu
+                                mode="horizontal"
+                                className="smallScreenSizeMenu"
                                 theme="dark"
                                 selectedKeys={[currentLocale]}
                             >
@@ -246,21 +246,10 @@ class App extends Component {
                                     <FormattedMessage id="support" />
                                 </Menu.Item>
                             </Menu>
-                        </Sider>
-                        <Layout
-                            style={{ marginLeft: collapsedSider ? 80 : 200 }}
-                        >
                             <Content className="intentionsContent">
-                                <Header
-                                    style={{
-                                        minHeight: 370,
-                                        padding: 0,
-                                        marginTop: 24,
-                                    }}
-                                >
+                                <Header className="imageHeader">
                                     <div className="imageTitle">
                                         <img
-                                            width={900}
                                             src="/images/header.jpg"
                                             alt="Snow On The Ridge"
                                         />
