@@ -65,7 +65,7 @@
 
     .modalAbout {
         width: 80% !important;
-        max-width: 768px;
+        max-width: 790px;
     }
 }
 
@@ -166,4 +166,19 @@ h4 {
 .ant-back-top {
     right: 24px !important;
     bottom: 24px !important;
+}
+
+.imageAbout img {
+    margin-bottom: 12px;
+    box-shadow: 1px 1px 2px grey;
+    border-radius: 3px !important;
+}
+
+.progressCounter {
+    position: absolute;
+    bottom: 20px;
+    left: 23px;
+    padding: 6px;
+    background: #f0f2f5;
+    border-radius: 140px;
 }

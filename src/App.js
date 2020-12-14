@@ -17,7 +17,15 @@
  */
 
 import React, { Component } from "react";
-import { Layout, Menu, BackTop, ConfigProvider, Modal, Typography } from "antd";
+import {
+    Layout,
+    Menu,
+    BackTop,
+    ConfigProvider,
+    Modal,
+    Typography,
+    Progress,
+} from "antd";
 import {
     TranslationOutlined,
     QuestionOutlined,
@@ -60,6 +68,7 @@ class App extends Component {
         currentAntLocale: enGB,
         visibleAbout: false,
         visibleSupport: false,
+        progressCounter: 0,
     };
 
     /**
@@ -87,6 +96,7 @@ class App extends Component {
             ...this.state,
             currentLocale: newLocale,
             currentAntLocale: this.getAntLocale(newLocale),
+            progressCounter: 0,
         });
 
         switch (newLocale) {
@@ -138,12 +148,20 @@ class App extends Component {
         });
     };
 
+    handleProgress = (progress) => {
+        this.setState({
+            ...this.state,
+            progressCounter: progress,
+        });
+    };
+
     render() {
         const {
             currentLocale,
             currentAntLocale,
             visibleAbout,
             visibleSupport,
+            progressCounter,
         } = this.state;
 
         return (
@@ -213,6 +231,12 @@ class App extends Component {
                                 >
                                     <FormattedMessage id="support" />
                                 </Menu.Item>
+                                <Progress
+                                    type="circle"
+                                    percent={progressCounter}
+                                    className="progressCounter"
+                                    width={140}
+                                />
                             </Menu>
                         </Sider>
                         <Layout className="expandedSider">
@@ -266,6 +290,7 @@ class App extends Component {
                                 <IntentionsForm
                                     locale={this.translations[currentLocale]}
                                     lang={currentLocale}
+                                    handleProgress={this.handleProgress}
                                 />
                             </Content>
                             <Footer className="intentionsFooter">

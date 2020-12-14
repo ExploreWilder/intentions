@@ -17,7 +17,7 @@
  */
 
 import React from "react";
-import { Collapse } from "antd";
+import { Collapse, Image } from "antd";
 import { useIntl } from "react-intl";
 const { Panel } = Collapse;
 
@@ -38,6 +38,14 @@ const About = () => {
                 key={panels.length}
                 className="aboutPanel"
             >
+                {section === "Me" ? (
+                    <Image
+                        src="/images/scenic_camp.jpg"
+                        className="imageAbout"
+                    />
+                ) : (
+                    ""
+                )}
                 <p
                     dangerouslySetInnerHTML={{
                         __html: formatMessage({ id: `about${section}Desc` }),
@@ -58,7 +66,7 @@ const About = () => {
     });
 
     return (
-        <Collapse defaultActiveKey={["0"]} accordion ghost>
+        <Collapse defaultActiveKey={["0", "1", "4", "5"]} ghost>
             {panels}
         </Collapse>
     );

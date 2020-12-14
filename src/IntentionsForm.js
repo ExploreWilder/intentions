@@ -401,6 +401,7 @@ class IntentionsForm extends Component {
      */
     state = {
         members: [{}],
+        staticFormValues: null,
     };
 
     /**
@@ -447,9 +448,9 @@ class IntentionsForm extends Component {
      * Add one empty member to the list of members.
      */
     addMember = () => {
-        this.setState({
-            members: [...this.state.members, {}],
-        });
+        let newMembers = [...this.state.members, {}];
+        this.setState({ ...this.state, members: newMembers });
+        this.updateProgressCounter(this.state.staticFormValues, newMembers);
     };
 
     /**
@@ -458,9 +459,8 @@ class IntentionsForm extends Component {
     removeMember = () => {
         let members = this.state.members;
         members.pop();
-        this.setState({
-            members: members,
-        });
+        this.setState({ ...this.state, members: members });
+        this.updateProgressCounter(this.state.staticFormValues, members);
     };
 
     /**
@@ -473,9 +473,63 @@ class IntentionsForm extends Component {
             return idx === map_idx ? newMemberData : member;
         });
 
-        this.setState({
-            members: newMembers,
+        this.setState({ ...this.state, members: newMembers });
+        this.updateProgressCounter(this.state.staticFormValues, newMembers);
+    };
+
+    updateProgressCounter = (staticFormValues, members) => {
+        let currCounter = 0,
+            totalMembers = members.length;
+
+        // max for the static form = 60
+        if (staticFormValues !== null) {
+            if (staticFormValues.timeRange) {
+                currCounter += 10;
+            }
+            if (staticFormValues.activity) {
+                currCounter += 5;
+            }
+            if (staticFormValues.essentialGear) {
+                currCounter += 10;
+            }
+            if (staticFormValues.postTripIntentionsDetails) {
+                currCounter += 10;
+            }
+            if (staticFormValues.prePostTripIntentions) {
+                currCounter += 5;
+            }
+            if (staticFormValues.tripIntentionsDetails) {
+                currCounter += 20;
+            }
+        }
+
+        // max for all members = 40
+        members.forEach((member) => {
+            if (member.firstName && member.familyName) {
+                currCounter += 10 / totalMembers;
+            }
+            if (member.description) {
+                currCounter += 10 / totalMembers;
+            }
+            if (member.phoneNumber) {
+                currCounter += 10 / totalMembers;
+            }
+            if (member.identity) {
+                currCounter += 5 / totalMembers;
+            }
+            if (member.sex) {
+                currCounter += 3 / totalMembers;
+            }
+            if (member.level) {
+                currCounter += 2 / totalMembers;
+            }
         });
+        this.props.handleProgress(currCounter);
+    };
+
+    onValuesChange = (changedValues, allValues) => {
+        this.setState({ ...this.state, staticFormValues: allValues });
+        this.updateProgressCounter(allValues, this.state.members);
     };
 
     /**
@@ -492,6 +546,7 @@ class IntentionsForm extends Component {
                 layout="vertical"
                 className="intentionsForm"
                 onFinish={this.onFinish}
+                onValuesChange={this.onValuesChange}
             >
                 <Divider>
                     <Title level={4}>
