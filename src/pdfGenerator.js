@@ -51,13 +51,18 @@ class pdfGenerator extends jsPDF {
      * Add some fonts to the PDF, not just for the style, but also to handle
      * unicode (letters, accents, etc.)
      * @param fonts List of fonts.
+     * @param data All form data (static fields and members data.)
+     * @param locale Current translation.
+     * @param lang The current locale codename in two letters.
+     * @param callbackOnSuccess The handler called when the PDF has successfully been generated.
      */
-    constructor(fonts, data, locale, lang) {
+    constructor(fonts, data, locale, lang, callbackOnSuccess) {
         const lineHeight = 1.2;
         super({
             unit: "in",
             lineHeight: lineHeight,
         });
+        this.handleOnSuccess = callbackOnSuccess;
         this.locale = locale;
         this.cache = createIntlCache();
         this.intl = createIntl(
@@ -93,6 +98,7 @@ class pdfGenerator extends jsPDF {
                 this.addFont(filename, font.name, font.style);
                 if (!--progress) {
                     this.generatePdf();
+                    this.handleOnSuccess();
                 }
             };
 
@@ -126,6 +132,11 @@ class pdfGenerator extends jsPDF {
         return `${date} ${this.locale.dateTimeGap} ${time}`;
     };
 
+    /**
+     * Return one of the two datetime in the time range.
+     * @param id 0 or 1.
+     * @returns {string} Human-readable string of the date.
+     */
     timeRangeToString = (id) => {
         if (this.formData.timeRange === undefined) {
             return this.locale.unknown;

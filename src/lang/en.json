@@ -121,5 +121,11 @@
     "page": "Page",
     "pto": "please turn over",
     "source": "Source",
-    "status": "Status"
+    "status": "Status",
+    "onPdfSuccessTitle": "Well Done!",
+    "onPdfSuccessContentStep0": "Plan your trip and create your lifesaving document,",
+    "onPdfSuccessContentStep1": "Share the document to your trusted contact,",
+    "onPdfSuccessContentStep2": "Enjoy your trip,",
+    "onPdfSuccessContentStep3": "Tell your trusted contact as soon as you have returned safely,",
+    "onPdfSuccessContentStep4": "Share this web application to your friends!"
 }

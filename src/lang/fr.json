@@ -121,5 +121,11 @@
     "page": "Page",
     "pto": "tournez la page",
     "source": "Source",
-    "status": "Statut"
+    "status": "Statut",
+    "onPdfSuccessTitle": "Bien joué !",
+    "onPdfSuccessContentStep0": "Planifier votre aventure et créer votre document de secours ;",
+    "onPdfSuccessContentStep1": "Partager le document à votre contact de confiance ;",
+    "onPdfSuccessContentStep2": "Vivre l'aventure ;",
+    "onPdfSuccessContentStep3": "Annoncer votre retour à votre contact de confiance ;",
+    "onPdfSuccessContentStep4": "Partager cette appli web à vos amis !"
 }

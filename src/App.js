@@ -25,6 +25,7 @@ import {
     Modal,
     Typography,
     Progress,
+    Button,
 } from "antd";
 import {
     TranslationOutlined,
@@ -34,6 +35,7 @@ import {
 import { IntlProvider, FormattedMessage } from "react-intl";
 import CopyrightNotice from "./CopyrightNotice";
 import About from "./About";
+import PdfCreationOnSuccess from "./PdfCreationOnSuccess";
 import IntentionsForm from "./IntentionsForm";
 import enGB from "antd/lib/locale/en_GB";
 import "moment/locale/en-gb";
@@ -68,6 +70,7 @@ class App extends Component {
         currentAntLocale: enGB,
         visibleAbout: false,
         visibleSupport: false,
+        visiblePdfCreationOnSuccess: false,
         progressCounter: 0,
     };
 
@@ -119,6 +122,16 @@ class App extends Component {
     };
 
     /**
+     * Close the modal used as feedback of a successful PDF creation.
+     */
+    onClosePdfCreationOnSuccess = () => {
+        this.setState({
+            ...this.state,
+            visiblePdfCreationOnSuccess: false,
+        });
+    };
+
+    /**
      * Show the "About" modal.
      */
     showAbout = () => {
@@ -148,10 +161,24 @@ class App extends Component {
         });
     };
 
+    /**
+     * Update the counter used to highlight how much the form is filled in.
+     * @param progress Percentage.
+     */
     handleProgress = (progress) => {
         this.setState({
             ...this.state,
             progressCounter: progress,
+        });
+    };
+
+    /**
+     * Show the modal used as feedback of a successful PDF creation.
+     */
+    handleSuccess = () => {
+        this.setState({
+            ...this.state,
+            visiblePdfCreationOnSuccess: true,
         });
     };
 
@@ -162,6 +189,7 @@ class App extends Component {
             visibleAbout,
             visibleSupport,
             progressCounter,
+            visiblePdfCreationOnSuccess,
         } = this.state;
 
         return (
@@ -179,6 +207,22 @@ class App extends Component {
                         footer={<CopyrightNotice />}
                     >
                         <About />
+                    </Modal>
+                    <Modal
+                        title={<FormattedMessage id="onPdfSuccessTitle" />}
+                        width={600}
+                        visible={visiblePdfCreationOnSuccess}
+                        onCancel={this.onClosePdfCreationOnSuccess}
+                        footer={
+                            <Button
+                                type="primary"
+                                onClick={this.onClosePdfCreationOnSuccess}
+                            >
+                                OK
+                            </Button>
+                        }
+                    >
+                        <PdfCreationOnSuccess />
                     </Modal>
                     <Modal
                         title={<FormattedMessage id="aboutSupportTitle" />}
@@ -233,7 +277,7 @@ class App extends Component {
                                 </Menu.Item>
                                 <Progress
                                     type="circle"
-                                    percent={progressCounter}
+                                    percent={Math.ceil(progressCounter)}
                                     className="progressCounter"
                                     width={140}
                                 />
@@ -291,6 +335,7 @@ class App extends Component {
                                     locale={this.translations[currentLocale]}
                                     lang={currentLocale}
                                     handleProgress={this.handleProgress}
+                                    handleSuccess={this.handleSuccess}
                                 />
                             </Content>
                             <Footer className="intentionsFooter">

@@ -29,6 +29,9 @@ import {
     Modal,
     Typography,
     Popconfirm,
+    Spin,
+    Space,
+    Steps,
 } from "antd";
 import {
     FilePdfOutlined,
@@ -41,6 +44,7 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
+const { Step } = Steps;
 
 /**
  * List of members except the team leader.
@@ -360,33 +364,36 @@ const AddRemoveMemberButtons = (props) => {
 
     return (
         <Form.Item style={{ textAlign: "center" }}>
-            <Button
-                icon={<UserAddOutlined />}
-                htmlType="button"
-                onClick={addMember}
-            >
-                <FormattedMessage id="addMember" />
-            </Button>
-            {isAlone ? null : (
-                <Popconfirm
-                    title={<FormattedMessage id="popConfirmRemoveMember" />}
-                    okText={<FormattedMessage id="popConfirmOkText" />}
-                    onConfirm={handleConfirm}
-                    cancelText={<FormattedMessage id="popConfirmCancelText" />}
-                    onCancel={handleCancel}
-                    visible={visible}
-                    mouseLeaveDelay={0}
+            <Space>
+                <Button
+                    icon={<UserAddOutlined />}
+                    htmlType="button"
+                    onClick={addMember}
                 >
-                    <Button
-                        icon={<UserDeleteOutlined />}
-                        htmlType="button"
-                        onClick={showPopConfirm}
-                        style={{ margin: "0 8px" }}
+                    <FormattedMessage id="addMember" />
+                </Button>
+                {isAlone ? null : (
+                    <Popconfirm
+                        title={<FormattedMessage id="popConfirmRemoveMember" />}
+                        okText={<FormattedMessage id="popConfirmOkText" />}
+                        onConfirm={handleConfirm}
+                        cancelText={
+                            <FormattedMessage id="popConfirmCancelText" />
+                        }
+                        onCancel={handleCancel}
+                        visible={visible}
+                        mouseLeaveDelay={0}
                     >
-                        <FormattedMessage id="removeMember" />
-                    </Button>
-                </Popconfirm>
-            )}
+                        <Button
+                            icon={<UserDeleteOutlined />}
+                            htmlType="button"
+                            onClick={showPopConfirm}
+                        >
+                            <FormattedMessage id="removeMember" />
+                        </Button>
+                    </Popconfirm>
+                )}
+            </Space>
         </Form.Item>
     );
 };
@@ -402,6 +409,7 @@ class IntentionsForm extends Component {
     state = {
         members: [{}],
         staticFormValues: null,
+        inProgress: false,
     };
 
     /**
@@ -440,8 +448,17 @@ class IntentionsForm extends Component {
             ],
             data,
             this.props.locale,
-            this.props.lang
+            this.props.lang,
+            this.handlePdfCreationSuccess
         );
+    };
+
+    /**
+     * Callback when the PDF has been generated and ready to be downloaded.
+     */
+    handlePdfCreationSuccess = () => {
+        this.setState({ ...this.state, inProgress: false });
+        this.props.handleSuccess();
     };
 
     /**
@@ -477,11 +494,17 @@ class IntentionsForm extends Component {
         this.updateProgressCounter(this.state.staticFormValues, newMembers);
     };
 
+    /**
+     * Update the counter highlighting how much the user has filled in the form.
+     * The idea is to motivate the user to share as much information as possible.
+     * The counter is a percentage - 0%: empty form, 100%: fulfilled.
+     * @param staticFormValues General trip information. 60% max.
+     * @param members Information specific to members. It has to be an array. 40% max shared.
+     */
     updateProgressCounter = (staticFormValues, members) => {
         let currCounter = 0,
             totalMembers = members.length;
 
-        // max for the static form = 60
         if (staticFormValues !== null) {
             if (staticFormValues.timeRange) {
                 currCounter += 10;
@@ -503,7 +526,6 @@ class IntentionsForm extends Component {
             }
         }
 
-        // max for all members = 40
         members.forEach((member) => {
             if (member.firstName && member.familyName) {
                 currCounter += 10 / totalMembers;
@@ -527,6 +549,11 @@ class IntentionsForm extends Component {
         this.props.handleProgress(currCounter);
     };
 
+    /**
+     * When the general information - static form - is updated.
+     * @param changedValues Not used.
+     * @param allValues All static fields.
+     */
     onValuesChange = (changedValues, allValues) => {
         this.setState({ ...this.state, staticFormValues: allValues });
         this.updateProgressCounter(allValues, this.state.members);
@@ -534,9 +561,10 @@ class IntentionsForm extends Component {
 
     /**
      * When the user submit the intentions form: generate the PDF.
-     * @param values
+     * @param values All data (static fields and members data.)
      */
     onFinish = (values) => {
+        this.setState({ ...this.state, inProgress: true });
         this.newDoc({ ...values, members: this.state.members });
     };
 
@@ -574,13 +602,17 @@ class IntentionsForm extends Component {
                 <GearList />
                 <Divider />
                 <Form.Item style={{ textAlign: "center" }}>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        icon={<FilePdfOutlined />}
-                    >
-                        <FormattedMessage id="generatePDF" />
-                    </Button>
+                    {this.state.inProgress ? (
+                        <Button type="primary" htmlType="submit" disabled>
+                            <Spin size="small" style={{ marginRight: 4 }} />
+                            <FormattedMessage id="generatePDF" />
+                        </Button>
+                    ) : (
+                        <Button type="primary" htmlType="submit">
+                            <FilePdfOutlined style={{ marginRight: 4 }} />
+                            <FormattedMessage id="generatePDF" />
+                        </Button>
+                    )}
                 </Form.Item>
             </Form>
         );
