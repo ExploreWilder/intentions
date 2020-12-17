@@ -280,6 +280,8 @@ class App extends Component {
                                     percent={Math.ceil(progressCounter)}
                                     className="progressCounter"
                                     width={140}
+                                    trailColor="#ffc107"
+                                    strokeColor="#4caf50"
                                 />
                             </Menu>
                         </Sider>
@@ -313,6 +315,14 @@ class App extends Component {
                                 >
                                     <FormattedMessage id="support" />
                                 </Menu.Item>
+                                <div className="progressCounter">
+                                    <Progress
+                                        percent={Math.ceil(progressCounter)}
+                                        size="small"
+                                        trailColor="#ffc107"
+                                        strokeColor="#4caf50"
+                                    />
+                                </div>
                             </Menu>
                             <Content className="intentionsContent">
                                 <Header className="imageHeader">

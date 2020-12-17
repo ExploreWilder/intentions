@@ -31,7 +31,6 @@ import {
     Popconfirm,
     Spin,
     Space,
-    Steps,
 } from "antd";
 import {
     FilePdfOutlined,
@@ -44,7 +43,6 @@ const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
-const { Step } = Steps;
 
 /**
  * List of members except the team leader.
